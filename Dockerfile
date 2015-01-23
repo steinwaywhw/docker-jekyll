@@ -12,7 +12,7 @@ WORKDIR /data
 
 RUN useradd jekyll --home /data
 
-ADD start.bash /jekyll-start
+ADD start.sh /jekyll-start
 CMD ["bash", "/jekyll-start"]
 
 EXPOSE 4000
