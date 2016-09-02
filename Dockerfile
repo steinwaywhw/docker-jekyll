@@ -1,18 +1,18 @@
-FROM ruby:latest
-RUN \
-  apt-get update && \
-  apt-get install -y python-pygments && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/*
-  
-RUN gem install bundler therubyracer execjs kramdown jekyll
+FROM steinwaywhw/pandoc
+RUN apt-get update && \
+    apt-get install -y nano python-pygments autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev \ 
+                       zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev nodejs npm && \
+    apt-get clean 
 
-VOLUME ["/data"]
-WORKDIR /data
+RUN git clone https://github.com/rbenv/rbenv.git ~/.rbenv && \
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc && \
+    echo 'eval "$(rbenv init -)"' >> ~/.zshrc && \
+    source ~/.bashrc
 
-RUN useradd jekyll --home /data
+#RUN git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+#RUN rbenv install 2.3.1 && rbenv global 2.3.1
 
-ADD start.sh /jekyll-start
-CMD ["bash", "/jekyll-start"]
+RUN apt-get install -y ruby2.3 ruby2.3-dev
+RUN gem install bundler jekyll
 
 EXPOSE 4000
